@@ -7,9 +7,7 @@ RUN yum -y install epel-release
 RUN yum -y install http://repo.opensciencegrid.org/osg/3.6/osg-3.6-el8-release-latest.rpm
 
 # well rounded basic system to support a wide range of user jobs
-RUN yum -y groups mark convert \
-    && yum -y grouplist \
-    && yum -y groupinstall "Compatibility Libraries" \
+RUN yum -y groupinstall "Compatibility Libraries" \
                            "Development Tools" \
                            "Scientific Support"
 
