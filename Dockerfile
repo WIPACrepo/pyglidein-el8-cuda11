@@ -1,7 +1,7 @@
 FROM nvidia/cuda:11.8.0-cudnn8-devel-rockylinux8
 
 RUN yum -y upgrade
-RUN yum -y install epel-release yum-plugin-priorities
+RUN yum -y install epel-release
 
 # osg repo
 RUN yum -y install http://repo.opensciencegrid.org/osg/3.6/osg-3.6-el8-release-latest.rpm
