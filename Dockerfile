@@ -1,49 +1,48 @@
 FROM nvidia/cuda:11.8.0-cudnn8-devel-rockylinux8
 
-RUN yum -y upgrade
-RUN yum -y install epel-release
+RUN dnf -y upgrade
+RUN dnf -y install epel-release dnf-plugins-core
+
+RUN dnf config-manager --set-enabled powertools
 
 # osg repo
-RUN yum -y install http://repo.opensciencegrid.org/osg/3.6/osg-3.6-el8-release-latest.rpm
+RUN dnf -y install http://repo.opensciencegrid.org/osg/3.6/osg-3.6-el8-release-latest.rpm
 
 # well rounded basic system to support a wide range of user jobs
-RUN for GROUPS in \
-        "Compatibility Libraries" \
-        "Development Tools" \
-        "Scientific Support"
-    ; do \
-        yum -y groupinstall $GROUPS ; \
-    done
+RUN dnf -y group install "Development Tools" "Scientific Support"
 
-RUN yum -y install \
+RUN dnf -y install \
            astropy-tools \
            bc \
            binutils \
            binutils-devel \
            cmake \
-           coreutils \
+           # coreutils \
            curl \
            davix-devel \
            dcap-devel \
-           doxygen \
-           dpm-devel \
+           # doxygen \
+           # dpm-devel \
            fontconfig \
            gcc \
            gcc-c++ \
            gcc-gfortran \
            git \
-           glew-devel \
+           # glew-devel \
            glib2-devel \
-           glib2-devel \
-           glib-devel \
-           globus-gass-copy-devel \
+           # glib2-devel \
+           # glib-devel \
+           # globus-gass-copy-devel \
            graphviz \
+           gfal2 \ 
            gsl-devel \
-           gtest-devel \
+           # gtest-devel \
            java-1.8.0-openjdk \
            java-1.8.0-openjdk-devel \
            json-c-devel \
-           lfc-devel \
+           # lfc-devel \
+           hdf5 \
+           libaec-devel \
            libattr-devel \
            libgfortran \
            libGLU \
@@ -61,34 +60,34 @@ RUN yum -y install \
            libXft-devel \
            libxml2 \
            libxml2-devel \
-           libXmu-devel \
-           libXpm \
-           libXpm-devel \
-           libXt \
-           mesa-libGL-devel \
+        #    libXmu-devel \
+        #    libXpm \
+        #    libXpm-devel \
+        #    libXt \
+        #    mesa-libGL-devel \
            nano \
-           numpy \
-           octave \
-           octave-devel \
-           openldap-devel \
+           python3-numpy \
+           # octave \
+           # octave-devel \
+           # openldap-devel \
            openssh \
            openssh-server \
-           openssl098e \
+           openssl \
            osg-wn-client \
            p7zip \
            p7zip-plugins \
-           python-astropy \
-           python-devel \
-           R-devel \
+           python3-astropy \
+           python3-devel \
+           # R-devel \
            redhat-lsb \
            redhat-lsb-core \
            rsync \
-           scipy \
+           python3-scipy \
            srm-ifce-devel \
            stashcache-client \
            subversion \
            tcl-devel \
-           tcsh \
+           # tcsh \
            time \
            tk-devel \
            vim \
@@ -98,14 +97,15 @@ RUN yum -y install \
            which
 
 # osg
-RUN yum -y install osg-ca-certs osg-wn-client \
+RUN dnf -y install osg-wn-client \ 
+    # osg-ca-certs \
     && rm -f /etc/grid-security/certificates/*.r0
 
 # htcondor - include so we can chirp
-RUN yum -y install condor
+RUN dnf -y install condor
 
 # Cleaning caches to reduce size of image
-RUN yum clean all
+RUN dnf clean all
 
 # required directories
 RUN for MNTPOINT in \
